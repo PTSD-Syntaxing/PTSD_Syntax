@@ -28,7 +28,7 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
                     temp_df = pd.DataFrame(temp_dict, index=[user])
                     stories = pd.concat([stories, temp_df])
             except:
-                print 'This user has no comments. :('
+                print('This user has no comments. :(')
 
     elif content == 'posts':
         for user in usernames:
@@ -39,7 +39,7 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
                     temp_df = pd.DataFrame(temp_dict, index=[user])
                     stories = pd.concat([stories, temp_df])
             except:
-                print 'This user has no posts. :('
+                print('This user has no posts. :(')
 
     return stories
 

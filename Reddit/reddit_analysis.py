@@ -38,7 +38,7 @@ def model_creation(df):
     df = df[df['flag'].isin([0, 1])]
 
     target = df['flag'].copy()
-    print target.value_counts()
+    print(target.value_counts())
 
     # Cleaning the posts to remove markup and vectorizing
     df['text'] = df['text'].astype(str).apply(post_cleaner)
@@ -65,7 +65,7 @@ def model_creation(df):
     cv1 = cross_val_score(rf, X, y)
     cv2 = cross_val_score(nb, X, y)
 
-    print results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1)
+    print(results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1))
 
 
 def main():
