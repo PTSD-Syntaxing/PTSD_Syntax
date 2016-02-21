@@ -57,13 +57,15 @@ def model_creation(df):
 
     # luke messing up sebastian's pristine code
     y = target.values
+    print y.shape
+    print y[0]
     X = preds.values
 
     rf = RandomForestClassifier()
     nb = BernoulliNB()
 
-    cv1 = cross_val_score(rf, preds, target)
-    cv2 = cross_val_score(nb, preds, target)
+    cv1 = cross_val_score(rf, preds, y)
+    cv2 = cross_val_score(nb, preds, y)
 
     print results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1)
 
