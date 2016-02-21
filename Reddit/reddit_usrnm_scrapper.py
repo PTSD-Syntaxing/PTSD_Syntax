@@ -20,12 +20,11 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
     # Loading posts from the usernames, whether comments or posts
     if content == 'comments':
         for user in usernames:
+
             for post in user.get_comments(limit=n):
 
-                pprint(post)
-
-                temp_dict = {'text': post.selftext, 'flag': flag, 'user': user}
-                temp_df = pd.DataFrame(temp_dict)
+                temp_dict = {'text': post, 'flag': flag, 'user': user}
+                temp_df = pd.DataFrame(temp_dict, index=[user])
                 stories = pd.concat([stories, temp_df])
 
     elif content == 'posts':
@@ -33,7 +32,7 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
             for post in user.get_submitted(limit=n):
 
                 temp_dict = {'text': post.selftext, 'flag': flag, 'user': user}
-                temp_df = pd.DataFrame(temp_dict)
+                temp_df = pd.DataFrame(temp_dict, index=[user])
                 stories = pd.concat([stories, temp_df])
 
     return stories
