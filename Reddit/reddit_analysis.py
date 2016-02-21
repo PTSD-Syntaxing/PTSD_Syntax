@@ -32,13 +32,15 @@ def post_cleaner(story):
 
 
 def model_creation(df):
+    # Dropping blank rows
+    df = df.dropna(how='any')
+
     # Cleaning the target variable, removing poorly encoded rows and turning into binary
     df['flag'].replace(to_replace='PTSD', value=1, inplace=True)
     df['flag'].replace(to_replace='non_PTSD', value=0, inplace=True)
     df = df[df['flag'].isin([0, 1])]
 
     target = df['flag'].copy()
-    print(target.value_counts())
 
     # Cleaning the posts to remove markup and vectorizing
     df['text'] = df['text'].astype(str).apply(post_cleaner)
@@ -70,8 +72,7 @@ def model_creation(df):
 
 def main():
     # data = reddit_scrapper.main()
-    data2 = pd.read_csv('reddit__usrnm_data.csv')
-    print(data2.columns)
+    data2 = pd.read_csv('reddit_mTBI_data.csv')
     model_creation(data2)
 
 

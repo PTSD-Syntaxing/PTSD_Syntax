@@ -1,4 +1,4 @@
-#! bin/var/env
+#!bin/var/env python 2.7
 
 import h2o
 import pandas as pd
@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 def post_cleaner(story):
 
     # Removing HTML markup using beautiful soup, removing non letter chars and lowercasing everything
-    text = BeautifulSoup(story).get_text()
+    text = BeautifulSoup(story, 'lxml').get_text()
     letters_only = re.sub('[^a-zA-Z]', ' ', text)
     lower_case = letters_only.lower()
 
@@ -48,7 +48,7 @@ def neural_network(df):
     preds = vectorizer.fit_transform(df['text'])
     preds = pd.DataFrame(preds.todense(), index=df.index)
 
-    preds.to_csv('preds.csv',quoting=csv.QUOTE_ALL)
+    preds.to_csv('preds.csv', quoting=csv.QUOTE_ALL)
     h2o_preds = h2o.import_file('preds.csv')
     print h2o_preds
 
