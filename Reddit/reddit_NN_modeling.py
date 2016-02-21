@@ -6,8 +6,10 @@ import re
 import csv
 
 from bs4 import BeautifulSoup
+from h2o.estimators.deeplearning import H2ODeepLearningEstimator
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
+
 
 def post_cleaner(story):
 
@@ -32,7 +34,13 @@ def post_cleaner(story):
 
 
 def neural_network(df):
+    # Spinning up h2o
     h2o.init()
+
+    # Removing blank rows
+    df = df.dropna(how='any')
+    df.index.names = ['post']
+
     # Cleaning the target variable, removing poorly encoded rows and turning into binary
     df['flag'].replace(to_replace='PTSD', value=1, inplace=True)
     df['flag'].replace(to_replace='non_PTSD', value=0, inplace=True)
@@ -48,9 +56,13 @@ def neural_network(df):
     preds = vectorizer.fit_transform(df['text'])
     preds = pd.DataFrame(preds.todense(), index=df.index)
 
-    preds.to_csv('preds.csv', quoting=csv.QUOTE_ALL)
-    h2o_preds = h2o.import_file('preds.csv')
-    print h2o_preds
+    # preds.columns = pd.Series(preds.columns).astype(str)
+    dict1 = preds.to_dict()
+
+    h2o_preds = h2o.H2OFrame.from_python(dict1)
+    print 'done'
+    print h2o_preds.head()
+
 
 def main():
     data = pd.read_pickle('reddit_data.p')
