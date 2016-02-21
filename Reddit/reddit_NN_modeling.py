@@ -56,12 +56,18 @@ def neural_network(df):
     preds = vectorizer.fit_transform(df['text'])
     preds = pd.DataFrame(preds.todense(), index=df.index)
 
-    # preds.columns = pd.Series(preds.columns).astype(str)
-    dict1 = preds.to_dict()
+    output_to_h2o = pd.concat([preds, target], axis=1)
+    output_to_h2o.to_csv('h2o file to load.csv')
 
-    h2o_preds = h2o.H2OFrame.from_python(dict1)
-    print 'done'
-    print h2o_preds.head()
+    hframe1 = h2o.import_file('h2o file to load.csv', header=1)
+    y = 'flag'
+    x = range(0,500)
+
+    model = H2ODeepLearningEstimator(distribution="multinomial", activation="RectifierWithDropout",
+                                     hidden=[32, 32, 32], input_dropout_ratio=0.2, sparse=True, l1=1e-5, epochs=10,
+                                     nfolds=5)
+
+    model.train(x=x, y=y, training_frame=hframe1)
 
 
 def main():
