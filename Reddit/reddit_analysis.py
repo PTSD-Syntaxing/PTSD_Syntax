@@ -23,7 +23,7 @@ def post_cleaner(story):
     lower_case = letters_only.lower()
     words = lower_case.split()
 
-    stops = set(stopwords.words('english'))
+    stops = set(stopwords.words('english') + ['ptsd'])
 
     meaningful_words = [w for w in words if not w in stops]
 
@@ -60,7 +60,7 @@ def model_creation(df):
     cv1 = cross_val_score(rf, X, y)
     cv2 = cross_val_score(nb, X, y)
 
-    print results, cv1, cv2
+    print results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1)
 
 
 def main():
