@@ -18,6 +18,7 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
         usernames.append(submission.author)
 
     # Loading posts from the usernames, whether comments or posts
+    # Broad exception acknowledged, should be changed in future
     if content == 'comments':
         for user in usernames:
             try:
