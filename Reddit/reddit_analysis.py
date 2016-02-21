@@ -55,7 +55,7 @@ def model_creation(df):
 
     results = xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
 
-    # luke messing up sebastian's pristine code
+    # Luke messing up sebastian's pristine code
     y = target.astype(int).values
     X = preds.values
 
