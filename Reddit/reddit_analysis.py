@@ -32,7 +32,8 @@ def model_creation(df):
     df['text'] = df['text'].apply(post_cleaner)
 
     vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
-    preds = pd.DataFrame(vectorizer.fit_transform(df['text']), index=df.index)
+    preds = vectorizer.fit_transform(df['text'])
+    preds = pd.DataFrame(preds.todense(), index=df.index)
 
     labels = LabelEncoder().fit(df['flag'])
     target = pd.Series(labels.transform(df['flag']), index=df.index)
@@ -42,12 +43,17 @@ def model_creation(df):
     xgboost_params = {'objective': 'binary:logistic', 'booster': 'gbtree', 'eval_metric': 'auc', 'eta': 0.01,
                       'subsample': 0.75, 'colsample_bytree': 0.68, 'max_depth': 7}
 
-    xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
+    results = xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
+
+    return results
+
 
 
 def main():
     data = reddit_scrapper.main()
-    model_creation(data)
+    scores = model_creation(data)
+    print scores
+    return scores
 
 if __name__ == '__main__':
-    main()
+    scores_sorry_sebastian = main()
