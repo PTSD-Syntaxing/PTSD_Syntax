@@ -20,30 +20,35 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
     # Loading posts from the usernames, whether comments or posts
     if content == 'comments':
         for user in usernames:
+            try:
+                for post in user.get_comments(limit=n):
 
-            for post in user.get_comments(limit=n):
-
-                temp_dict = {'text': post, 'flag': flag, 'user': user}
-                temp_df = pd.DataFrame(temp_dict, index=[user])
-                stories = pd.concat([stories, temp_df])
+                    temp_dict = {'text': post, 'flag': flag, 'user': user}
+                    temp_df = pd.DataFrame(temp_dict, index=[user])
+                    stories = pd.concat([stories, temp_df])
+            except:
+                print 'This user has no comments. :('
 
     elif content == 'posts':
         for user in usernames:
-            for post in user.get_submitted(limit=n):
+            try:
+                for post in user.get_submitted(limit=n):
 
-                temp_dict = {'text': post.selftext, 'flag': flag, 'user': user}
-                temp_df = pd.DataFrame(temp_dict, index=[user])
-                stories = pd.concat([stories, temp_df])
+                    temp_dict = {'text': post.selftext, 'flag': flag, 'user': user}
+                    temp_df = pd.DataFrame(temp_dict, index=[user])
+                    stories = pd.concat([stories, temp_df])
+            except:
+                print 'This user has no posts. :('
 
     return stories
 
 
 def main():
 
-    ptsd_stories = text_usrnm_gatherer('ptsd', 'PTSD', content='comments', n=1000)
-    non_ptsd_stories = text_usrnm_gatherer('tifu', 'non_PTSD', content='comments', n=1000)
+    ptsd_stories = text_usrnm_gatherer('ptsd', 'PTSD', content='comments', n=100)
+    non_ptsd_stories = text_usrnm_gatherer('tifu', 'non_PTSD', content='comments', n=100)
     output = pd.concat([ptsd_stories, non_ptsd_stories])
-    output.to_pickle('reddit_data.p')
+    output.to_pickle('reddit__usrnm_data.p')
 
     return output
 
