@@ -19,15 +19,14 @@ def text_sub_gatherer(subreddit_name, flag, n=100):
     return stories
 
 
-def main():
-    
+def main(subreddit, flag, limit):
+
+    stories = text_sub_gatherer(subreddit, flag, n=limit)
+    stories.to_pickle(subreddit+'_'+flag+'_'+str(limit)+'posts.p')
+
+
+if __name__ == '__main__':
     subreddit = 'ptsd'
     flag = 'PTSD'
     limit = 100
-    
-    stories = text_sub_gatherer(subreddit, flag, n=limit)
-    stories.to_csv(subreddit+'_'+flag+'_'+str(limit)+'posts.csv')
-
-if __name__ == '__main__':
-    main()
-    
+    main(subreddit, flag, limit)
