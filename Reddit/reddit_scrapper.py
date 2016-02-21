@@ -25,7 +25,7 @@ def main():
     ptsd_stories = text_sub_gatherer('tbi', 'TBI', n=1000)
     non_ptsd_stories = text_sub_gatherer('tifu', 'non_TBI', n=1000)
     output = pd.concat([ptsd_stories, non_ptsd_stories])
-    output.to_csv('reddit_TBI_data.csv')
+    output.to_csv('reddit_mTBI_data.csv')
     
     return output
 
