@@ -11,7 +11,8 @@ def text_sub_gatherer(subreddit_name, flag, n=100):
 
     stories = pd.DataFrame()
 
-    for submission in subreddit.get_hot(limit=n):
+    for submission in subreddit.get_top_from_all(limit=n):
+
         temp_dict = {'text': submission.selftext, 'flag': flag}
         temp_df = pd.DataFrame(temp_dict, index=[submission.id])
         stories = pd.concat([stories, temp_df])
@@ -22,11 +23,12 @@ def text_sub_gatherer(subreddit_name, flag, n=100):
 def main(subreddit, flag, limit):
 
     stories = text_sub_gatherer(subreddit, flag, n=limit)
+    print stories.head()
     stories.to_pickle(subreddit+'_'+flag+'_'+str(limit)+'posts.p')
 
 
 if __name__ == '__main__':
     subreddit = 'ptsd'
     flag = 'PTSD'
-    limit = 100
+    limit = 500
     main(subreddit, flag, limit)
