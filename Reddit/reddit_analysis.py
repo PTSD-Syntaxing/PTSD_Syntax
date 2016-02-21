@@ -51,7 +51,7 @@ def model_creation(df):
     xgtrain = xgb.DMatrix(preds.values, target.values)
 
     xgboost_params = {'objective': 'binary:logistic', 'booster': 'gbtree', 'eval_metric': 'auc', 'eta': 0.01,
-                      'subsample': 0.75, 'colsample_bytree': 0.68, 'max_depth': 7}
+                      'subsample': 0.75, 'colsample_bytree': 0.68, 'max_depth': 7, 'silent': 0}
 
     results = xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
 
