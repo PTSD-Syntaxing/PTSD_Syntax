@@ -10,6 +10,11 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.cross_validation import cross_val_score
+
 
 def post_cleaner(story):
 
@@ -45,15 +50,23 @@ def model_creation(df):
 
     results = xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
 
-    return results
+    # luke messing up sebastian's pristine code
+    y = target.values
+    X = preds.values
 
+    rf = RandomForestClassifier()
+    nb = BernoulliNB()
+
+    cv1 = cross_val_score(rf, X, y)
+    cv2 = cross_val_score(nb, X, y)
+
+    print results, cv1, cv2
 
 
 def main():
     data = reddit_scrapper.main()
-    scores = model_creation(data)
-    print scores
-    return scores
+    model_creation(data)
+
 
 if __name__ == '__main__':
-    scores_sorry_sebastian = main()
+    main()
