@@ -70,7 +70,8 @@ def model_creation(df):
 
 def main():
     # data = reddit_scrapper.main()
-    data2 = pd.read_csv('reddit__usrnm_data.csv', index_col=0)
+    data2 = pd.read_csv('reddit__usrnm_data.csv')
+    print(data2.columns)
     model_creation(data2)
 
 
