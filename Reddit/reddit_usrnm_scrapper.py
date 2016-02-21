@@ -46,8 +46,8 @@ def text_usrnm_gatherer(subreddit_source, flag, content='comments', n=100):
 
 def main():
 
-    ptsd_stories = text_usrnm_gatherer('ptsd', 'PTSD', content='comments', n=100)
-    non_ptsd_stories = text_usrnm_gatherer('tifu', 'non_PTSD', content='comments', n=100)
+    ptsd_stories = text_usrnm_gatherer('ptsd', 'PTSD', content='posts', n=100)
+    non_ptsd_stories = text_usrnm_gatherer('tifu', 'non_PTSD', content='posts', n=100)
     output = pd.concat([ptsd_stories, non_ptsd_stories])
     output.to_csv('reddit__usrnm_data.csv', index=False)
 
