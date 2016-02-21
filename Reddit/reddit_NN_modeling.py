@@ -60,6 +60,8 @@ def neural_network(df):
     output_to_h2o.to_csv('h2o file to load.csv')
 
     hframe1 = h2o.import_file('h2o file to load.csv', header=1)
+    print 'HFrame loaded, nothing to see here...'
+
     y = 'flag'
     x = range(0,500)
 
