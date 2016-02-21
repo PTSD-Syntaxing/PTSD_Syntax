@@ -56,16 +56,14 @@ def model_creation(df):
     results = xgb.cv(xgboost_params, xgtrain, num_boost_round=5, nfold=5, metrics={'error'}, seed=0, show_stdv=False)
 
     # luke messing up sebastian's pristine code
-    y = target.values
-    print y.shape
-    print y[0]
+    y = target.astype(int).values
     X = preds.values
 
     rf = RandomForestClassifier()
     nb = BernoulliNB()
 
-    cv1 = cross_val_score(rf, preds, y)
-    cv2 = cross_val_score(nb, preds, y)
+    cv1 = cross_val_score(rf, X, y)
+    cv2 = cross_val_score(nb, X, y)
 
     print results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1)
 
