@@ -20,15 +20,15 @@ def text_sub_gatherer(subreddit_name, flag, n=100):
     return stories
 
 
-def main(subreddit, flag, limit):
+def main():
 
-    stories = text_sub_gatherer(subreddit, flag, n=limit)
-    print stories.head()
-    stories.to_pickle(subreddit+'_'+flag+'_'+str(limit)+'posts.p')
+    ptsd_stories = text_sub_gatherer('ptsd', 'PTSD', n=1000)
+    non_ptsd_stories = text_sub_gatherer('tifu', 'non_PTSD', n=1000)
+    output = pd.concat([ptsd_stories, non_ptsd_stories])
+    output.to_pickle('reddit_data.p')
+    
+    return output
 
 
 if __name__ == '__main__':
-    subreddit = 'ptsd'
-    flag = 'PTSD'
-    limit = 500
-    main(subreddit, flag, limit)
+    main()
