@@ -49,7 +49,7 @@ def main():
     ptsd_stories = text_usrnm_gatherer('ptsd', 'PTSD', content='comments', n=100)
     non_ptsd_stories = text_usrnm_gatherer('tifu', 'non_PTSD', content='comments', n=100)
     output = pd.concat([ptsd_stories, non_ptsd_stories])
-    output.to_pickle('reddit__usrnm_data.p')
+    output.to_csv('reddit__usrnm_data.csv', index=False)
 
     return output
 

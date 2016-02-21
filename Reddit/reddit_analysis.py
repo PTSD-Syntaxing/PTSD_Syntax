@@ -8,7 +8,6 @@ import xgboost as xgb
 
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import LabelEncoder
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
@@ -33,16 +32,22 @@ def post_cleaner(story):
 
 
 def model_creation(df):
+    # Cleaning the target variable, removing poorly encoded rows and turning into binary
+    df['flag'].replace(to_replace='PTSD', value=1, inplace=True)
+    df['flag'].replace(to_replace='non_PTSD', value=0, inplace=True)
+    df = df[df['flag'].isin([0, 1])]
 
-    df['text'] = df['text'].apply(post_cleaner)
+    target = df['flag'].copy()
+    print target.value_counts()
+
+    # Cleaning the posts to remove markup and vectorizing
+    df['text'] = df['text'].astype(str).apply(post_cleaner)
 
     vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
     preds = vectorizer.fit_transform(df['text'])
     preds = pd.DataFrame(preds.todense(), index=df.index)
 
-    labels = LabelEncoder().fit(df['flag'])
-    target = pd.Series(labels.transform(df['flag']), index=df.index)
-
+    # Putting values into DMatrix for performance reasons, initializing xgboost params and training model
     xgtrain = xgb.DMatrix(preds.values, target.values)
 
     xgboost_params = {'objective': 'binary:logistic', 'booster': 'gbtree', 'eval_metric': 'auc', 'eta': 0.01,
@@ -57,15 +62,16 @@ def model_creation(df):
     rf = RandomForestClassifier()
     nb = BernoulliNB()
 
-    cv1 = cross_val_score(rf, X, y)
-    cv2 = cross_val_score(nb, X, y)
+    cv1 = cross_val_score(rf, preds, target)
+    cv2 = cross_val_score(nb, preds, target)
 
     print results['test-error-mean'].mean(), sum(cv1) / len(cv1), sum(cv2) / len(cv1)
 
 
 def main():
-    data = reddit_scrapper.main()
-    model_creation(data)
+    # data = reddit_scrapper.main()
+    data2 = pd.read_csv('reddit__usrnm_data.csv', index_col=0)
+    model_creation(data2)
 
 
 if __name__ == '__main__':
