@@ -1,12 +1,12 @@
 # P-Text: NLP to identify PTSD
 
 ## Summary
-### The Problem
-2.7 million veterans from OEF & OIF (as of Sep 2014)
-20% suffer from PTSD
-50% don't seek treatment
+#### The Problem
+- 2.7 million veterans from OEF & OIF (as of Sep 2014)
+- 20% suffer from PTSD
+- 50% don't seek treatment
 
-### Our Work
+#### Our Work
 We built a an nlp model that assesses the probability of PTSD in a suspected victim based on language gathered from correspondence and social media posts. Potential applications include:
 - Families - Helping veteran families gauge depth of loved one's condition and provide them with the appropriate tools to help (implemented)
 - Hotline triage - Crisis hotline prioritization based on assessed severity of caller's condition
